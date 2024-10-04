@@ -88,6 +88,33 @@ body {
   }
 }
 
+.localStorageButtons{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 500px;
+ margin-bottom: 20px;
+  
+  .localStorageButton{
+    background: none;
+    border: none;
+    color: #cecece;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+    margin-right: 12px;
+    &:hover{
+      color: #ffcb47;
+      text-decoration: underline;
+    }
+  }
+}
+.errorMessage{
+  width: 100%;
+  max-width: 500px;
+}
+
+
 
 // weather right now
 

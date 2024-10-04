@@ -26,9 +26,11 @@ body {
   width: 50%;
   padding-bottom: 20px;
 }
+
 .App-header .errorMessage {
   color: #da5656;
 }
+
 .App-header .siteDescription {
   margin-top: 10vh;
   text-align: center;
@@ -45,6 +47,7 @@ body {
   align-items: center;
   padding-bottom: 10px;
 }
+
 .inputForm input {
   width: 68%;
   height: 30px;
@@ -56,13 +59,16 @@ body {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
 }
+
 .inputForm input:hover {
   border-color: #ffcb47;
 }
+
 .inputForm input:focus {
   border-color: #ffcb47;
   box-shadow: 0 0 8px rgba(245, 217, 141, 0.75);
 }
+
 .inputForm button {
   width: 20%;
   height: 37px;
@@ -73,8 +79,37 @@ body {
   color: #0e1021;
   transition: background-color 0.2s ease;
 }
+
 .inputForm button:hover {
   background-color: #fcb810;
+}
+
+.localStorageButtons {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+.localStorageButtons .localStorageButton {
+  background: none;
+  border: none;
+  color: #cecece;
+  cursor: pointer;
+  padding: 0;
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+.localStorageButtons .localStorageButton:hover {
+  color: #ffcb47;
+  text-decoration: underline;
+}
+
+.errorMessage {
+  width: 100%;
+  max-width: 500px;
 }
 
 .weatherRightNow {
@@ -84,6 +119,7 @@ body {
   flex-direction: row;
   padding: 40px 0 40px 0;
 }
+
 .weatherRightNow > div:not(:last-child) {
   margin-right: 4vw;
 }
@@ -94,6 +130,7 @@ body {
   flex-direction: column;
   align-items: center;
 }
+
 .weatherInfo .cityName {
   font-size: 24px;
   font-weight: bold;
@@ -125,6 +162,7 @@ body {
   flex-direction: column;
   font-size: 18px;
 }
+
 .weatherDescription > div:not(:last-child) {
   margin-bottom: 5px;
 }
@@ -137,10 +175,12 @@ body {
   flex-wrap: wrap;
   margin: 60px 0 60px 0;
 }
+
 .forecastList .forecastListItem {
   list-style-type: none;
   margin-bottom: 25px;
 }
+
 .forecastList .forecastListItem .forecastListDateItem {
   font-size: 18px;
   font-weight: 600;
@@ -148,10 +188,12 @@ body {
   color: #cecece;
   padding-bottom: 10px;
 }
+
 .forecastList .forecastListItem ul {
   margin: 0;
   padding: 0;
 }
+
 .forecastList .forecastListItem ul li {
   display: flex;
   flex-direction: row;
@@ -161,5 +203,7 @@ body {
 .weatherIcon {
   width: 50px;
 }
+
+
 
 /*# sourceMappingURL=App.css.map */

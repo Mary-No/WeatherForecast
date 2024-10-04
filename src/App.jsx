@@ -9,7 +9,8 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [dates, setDates] = useState([]);
-    const [city, setCity] = useState('')
+    const [city, setCity] = useState('');
+    const [citiesInLocalStorage, setCitiesInLocalStorage] = useState([]);
 
     function dateHandler(date) {
         // разделяем дату и время
@@ -85,7 +86,7 @@ function App() {
     async function defineUserGeolocation() {
         const API_key = "310595828dc44fea862411b9cab9f11d"
         const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${API_key}`;
-        try{
+        try {
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error(`Error in the user geolocation request: ${response.status} ${response.statusText}`);
@@ -93,11 +94,14 @@ function App() {
             const geoData = await response.json();
             weatherForecast(geoData.city)
             console.log(geoData)
-        }catch(err){
+        } catch (err) {
             setError(err.message)
         }
     }
-    useEffect(() => { defineUserGeolocation()}, [])
+
+    useEffect(() => {
+        defineUserGeolocation()
+    }, [])
 
     const handleInputChange = (event) => {
         setCity(event.target.value)
@@ -106,10 +110,25 @@ function App() {
         event.preventDefault()
         if (city !== '') {
             await weatherForecast(city)
+            addToLocalStorageCity(city)
             setCity('')
         } else {
             setError('Enter city name, input field is empty')
         }
+    }
+
+    function addToLocalStorageCity(city) {
+        let cities = JSON.parse(localStorage.getItem("cities")) || [];
+        const cityIndex = cities.indexOf(city)
+        if (cityIndex !== -1) {
+            cities.splice(cityIndex, 1)
+        }
+        cities.unshift(city)
+        if (cities.length > 4) {
+            cities.pop()
+        }
+        localStorage.setItem("cities", JSON.stringify(cities))
+        setCitiesInLocalStorage(cities)
     }
 
 
@@ -120,6 +139,11 @@ function App() {
                     <input type="text" value={city} onChange={handleInputChange} placeholder="Enter the city name"/>
                     <button type="submit">Send</button>
                 </form>
+                <div className="localStorageButtons">
+                {citiesInLocalStorage.length!==0 && citiesInLocalStorage.map((item, index) => (
+                    <button className="localStorageButton" onClick={()=>weatherForecast(item)} key={index}>{item}</button>
+                ))}
+                </div>
                 {error && <div className="errorMessage">{error}</div>}
             </div>
 
@@ -131,8 +155,8 @@ function App() {
                         <div className="cityName">{weatherRightNowData.name}</div>
                         <div className="weatherRightNowIcon">
                             <img className="weatherRightNowIconImg"
-                                  src={`https://openweathermap.org/img/wn/${weatherRightNowData.weather[0].icon}@2x.png`}
-                                  alt={weatherRightNowData.weather[0].icon}/>
+                                 src={`https://openweathermap.org/img/wn/${weatherRightNowData.weather[0].icon}@2x.png`}
+                                 alt={weatherRightNowData.weather[0].icon}/>
                             <p>{weatherRightNowData.weather[0].description}</p>
                         </div>
                     </div>
