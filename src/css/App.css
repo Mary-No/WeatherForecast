@@ -1,0 +1,165 @@
+body {
+  background: #0e1021;
+  color: #b0b0b0;
+  font-family: Open Sans, sans-serif;
+  font-size: 16px;
+  padding: 10vh 10vw;
+  height: 100vh;
+  weight: 100vw;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.App-header {
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  padding-bottom: 20px;
+}
+.App-header .errorMessage {
+  color: #da5656;
+}
+.App-header .siteDescription {
+  margin-top: 10vh;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 500;
+  color: rgba(145, 145, 145, 0.75);
+}
+
+.inputForm {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+}
+.inputForm input {
+  width: 68%;
+  height: 30px;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 2px 20px;
+  font-size: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+.inputForm input:hover {
+  border-color: #ffcb47;
+}
+.inputForm input:focus {
+  border-color: #ffcb47;
+  box-shadow: 0 0 8px rgba(245, 217, 141, 0.75);
+}
+.inputForm button {
+  width: 20%;
+  height: 37px;
+  background-color: #fdca43;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #0e1021;
+  transition: background-color 0.2s ease;
+}
+.inputForm button:hover {
+  background-color: #fcb810;
+}
+
+.weatherRightNow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  padding: 40px 0 40px 0;
+}
+.weatherRightNow > div:not(:last-child) {
+  margin-right: 4vw;
+}
+
+.weatherInfo {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.weatherInfo .cityName {
+  font-size: 24px;
+  font-weight: bold;
+  color: #cecece;
+  letter-spacing: 0.7px;
+}
+
+.weatherRightNowIcon {
+  position: relative;
+}
+
+.weatherRightNowIcon p {
+  position: absolute;
+  top: 60%;
+  left: 4%;
+  text-align: center;
+}
+
+.weatherTemperature {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 54px;
+}
+
+.weatherDescription {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 18px;
+}
+.weatherDescription > div:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.forecastList {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 60px 0 60px 0;
+}
+.forecastList .forecastListItem {
+  list-style-type: none;
+  margin-bottom: 25px;
+}
+.forecastList .forecastListItem .forecastListDateItem {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  color: #cecece;
+  padding-bottom: 10px;
+}
+.forecastList .forecastListItem ul {
+  margin: 0;
+  padding: 0;
+}
+.forecastList .forecastListItem ul li {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.weatherIcon {
+  width: 50px;
+}
+
+/*# sourceMappingURL=App.css.map */
