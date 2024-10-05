@@ -50,6 +50,7 @@ function App() {
             }
             const weatherRightNowData = await weatherResponse.json();
             setWeatherRightNowData(weatherRightNowData)
+            console.log(weatherRightNowData)
 
         } catch (err) {
             setError(err.message);
@@ -93,7 +94,6 @@ function App() {
             }
             const geoData = await response.json();
             weatherForecast(geoData.city)
-            console.log(geoData)
         } catch (err) {
             setError(err.message)
         }
@@ -101,9 +101,11 @@ function App() {
 
     useEffect(() => {
         defineUserGeolocation()
+        addToLocalStorageCity()
     }, [])
 
     const handleInputChange = (event) => {
+        debugger
         setCity(event.target.value)
     }
     const handleSubmit = async (event) => {
@@ -119,13 +121,15 @@ function App() {
 
     function addToLocalStorageCity(city) {
         let cities = JSON.parse(localStorage.getItem("cities")) || [];
-        const cityIndex = cities.indexOf(city)
-        if (cityIndex !== -1) {
-            cities.splice(cityIndex, 1)
-        }
-        cities.unshift(city)
-        if (cities.length > 4) {
-            cities.pop()
+        if(city){
+            const cityIndex = cities.indexOf(city)
+            if (cityIndex !== -1) {
+                cities.splice(cityIndex, 1)
+            }
+            cities.unshift(city)
+            if (cities.length > 4) {
+                cities.pop()
+            }
         }
         localStorage.setItem("cities", JSON.stringify(cities))
         setCitiesInLocalStorage(cities)
@@ -142,6 +146,7 @@ function App() {
                 <div className="localStorageButtons">
                 {citiesInLocalStorage.length!==0 && citiesInLocalStorage.map((item, index) => (
                     <button className="localStorageButton" onClick={()=>weatherForecast(item)} key={index}>{item}</button>
+
                 ))}
                 </div>
                 {error && <div className="errorMessage">{error}</div>}
