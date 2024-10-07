@@ -105,7 +105,6 @@ function App() {
     }, [])
 
     const handleInputChange = (event) => {
-        debugger
         setCity(event.target.value)
     }
     const handleSubmit = async (event) => {
@@ -121,7 +120,7 @@ function App() {
 
     function addToLocalStorageCity(city) {
         let cities = JSON.parse(localStorage.getItem("cities")) || [];
-        if(city){
+        if (city) {
             const cityIndex = cities.indexOf(city)
             if (cityIndex !== -1) {
                 cities.splice(cityIndex, 1)
@@ -144,10 +143,11 @@ function App() {
                     <button type="submit">Send</button>
                 </form>
                 <div className="localStorageButtons">
-                {citiesInLocalStorage.length!==0 && citiesInLocalStorage.map((item, index) => (
-                    <button className="localStorageButton" onClick={()=>weatherForecast(item)} key={index}>{item}</button>
+                    {citiesInLocalStorage.length !== 0 && citiesInLocalStorage.map((item, index) => (
+                        <button className="localStorageButton" onClick={() => weatherForecast(item)}
+                                key={index}>{item}</button>
 
-                ))}
+                    ))}
                 </div>
                 {error && <div className="errorMessage">{error}</div>}
             </div>

@@ -22,13 +22,24 @@ body {
   display: flex;
   justify-content: left;
   flex-direction: column;
-  align-items: center;
-  width: 50%;
+  width: 60%;
   padding-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .App-header {
+    width: 80%;
+  }
+}
+@media (max-width: 580px) {
+  .App-header {
+    width: 100%;
+  }
 }
 .App-header .errorMessage {
   color: #da5656;
 }
+
 .App-header .siteDescription {
   margin-top: 10vh;
   text-align: center;
@@ -39,33 +50,41 @@ body {
 
 .inputForm {
   width: 100%;
-  max-width: 500px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 10px;
 }
+
 .inputForm input {
-  width: 68%;
-  height: 30px;
+  width: 70%;
+  height: 32px;
   border: 2px solid white;
   border-radius: 5px;
-  margin-right: 5px;
+  margin-right: 1em;
   padding: 2px 20px;
   font-size: 16px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
 }
+
+@media (max-width: 425px) {
+  .inputForm input {
+    margin-right: 0.6em;
+  }
+}
 .inputForm input:hover {
   border-color: #ffcb47;
 }
+
 .inputForm input:focus {
   border-color: #ffcb47;
   box-shadow: 0 0 8px rgba(245, 217, 141, 0.75);
 }
+
 .inputForm button {
   width: 20%;
-  height: 37px;
+  height: 39px;
   background-color: #fdca43;
   border: none;
   border-radius: 5px;
@@ -73,6 +92,7 @@ body {
   color: #0e1021;
   transition: background-color 0.2s ease;
 }
+
 .inputForm button:hover {
   background-color: #fcb810;
 }
@@ -80,10 +100,11 @@ body {
 .localStorageButtons {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
-  max-width: 500px;
   margin-bottom: 20px;
 }
+
 .localStorageButtons .localStorageButton {
   background: none;
   border: none;
@@ -93,6 +114,7 @@ body {
   font-size: 16px;
   margin-right: 12px;
 }
+
 .localStorageButtons .localStorageButton:hover {
   color: #ffcb47;
   text-decoration: underline;
@@ -104,22 +126,39 @@ body {
 }
 
 .weatherRightNow {
-  width: 100%;
+  width: 60%;
   display: flex;
   justify-content: center;
   flex-direction: row;
   padding: 40px 0 40px 0;
 }
+
+@media (max-width: 768px) {
+  .weatherRightNow {
+    width: 100%;
+  }
+}
+@media (max-width: 425px) {
+  .weatherRightNow {
+    flex-wrap: wrap;
+  }
+}
 .weatherRightNow > div:not(:last-child) {
   margin-right: 4vw;
 }
 
+@media (max-width: 425px) {
+  .weatherRightNow > div:not(:last-child) {
+    margin-bottom: 50px;
+  }
+}
 .weatherInfo {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
+
 .weatherInfo .cityName {
   font-size: 24px;
   font-weight: bold;
@@ -151,6 +190,7 @@ body {
   flex-direction: column;
   font-size: 18px;
 }
+
 .weatherDescription > div:not(:last-child) {
   margin-bottom: 5px;
 }
@@ -163,9 +203,16 @@ body {
   flex-wrap: wrap;
   margin: 60px 0 60px 0;
 }
+
 .forecastList .forecastListItem {
   list-style-type: none;
   margin-bottom: 25px;
+}
+
+@media (max-width: 425px) {
+  .forecastList .forecastListItem {
+    padding: 0;
+  }
 }
 .forecastList .forecastListItem .forecastListDateItem {
   font-size: 18px;
@@ -174,10 +221,12 @@ body {
   color: #cecece;
   padding-bottom: 10px;
 }
+
 .forecastList .forecastListItem ul {
   margin: 0;
   padding: 0;
 }
+
 .forecastList .forecastListItem ul li {
   display: flex;
   flex-direction: row;
@@ -187,5 +236,7 @@ body {
 .weatherIcon {
   width: 50px;
 }
+
+
 
 /*# sourceMappingURL=App.css.map */

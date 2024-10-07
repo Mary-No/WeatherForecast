@@ -26,14 +26,20 @@ body {
   display: flex;
   justify-content: left;
   flex-direction: column;
-  align-items: center;
-  width: 50%;
+  width: 60%;
   padding-bottom: 20px;
+  @media (max-width: 768px) {
+    width: 80%;
+  }
+  @media (max-width: 580px) {
+    width: 100%;
+  }
 
   .errorMessage {
     color: #da5656;
   }
-  .siteDescription{
+
+  .siteDescription {
     margin-top: 10vh;
     text-align: center;
     font-size: 22px;
@@ -44,23 +50,25 @@ body {
 
 .inputForm {
   width: 100%;
-  max-width: 500px;
+  //max-width: 500px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 10px;
 
   input {
-    width: 68%;
-    height: 30px;
+    width: 70%;
+    height: 32px;
     border: 2px solid white;
     border-radius: 5px;
-    margin-right: 5px;
+    margin-right: 1em;
     padding: 2px 20px;
     font-size: 16px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
     outline: none;
+    @media (max-width: 425px) {
+      margin-right: 0.6em;
+    }
 
     &:hover {
       border-color: #ffcb47;
@@ -74,7 +82,7 @@ body {
 
   button {
     width: 20%;
-    height: 37px;
+    height: 39px;
     background-color: #fdca43;
     border: none;
     border-radius: 5px;
@@ -88,14 +96,14 @@ body {
   }
 }
 
-.localStorageButtons{
+.localStorageButtons {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   width: 100%;
-  max-width: 500px;
- margin-bottom: 20px;
-  
-  .localStorageButton{
+  margin-bottom: 20px;
+
+  .localStorageButton {
     background: none;
     border: none;
     color: #cecece;
@@ -103,64 +111,82 @@ body {
     padding: 0;
     font-size: 16px;
     margin-right: 12px;
-    &:hover{
+
+    &:hover {
       color: #ffcb47;
       text-decoration: underline;
     }
   }
 }
-.errorMessage{
+
+.errorMessage {
   width: 100%;
   max-width: 500px;
 }
 
 
-
 // weather right now
 
-.weatherRightNow{
-  width: 100%;
+.weatherRightNow {
+  width: 60%;
   display: flex;
   justify-content: center;
   flex-direction: row;
   padding: 40px 0 40px 0;
-  >div:not(:last-child){
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  @media (max-width: 425px) {
+    flex-wrap: wrap;
+  }
+
+  > div:not(:last-child) {
     margin-right: 4vw;
+    @media (max-width: 425px) {
+      margin-bottom: 50px;
+    }
   }
 }
-.weatherInfo{
+
+.weatherInfo {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  .cityName{
+
+  .cityName {
     font-size: 24px;
     font-weight: bold;
     color: #cecece;
     letter-spacing: 0.7px;
   }
 }
-.weatherRightNowIcon{
+
+.weatherRightNowIcon {
   position: relative;
 }
-.weatherRightNowIcon p{
+
+.weatherRightNowIcon p {
   position: absolute;
-  top:60%;
-  left:4%;
+  top: 60%;
+  left: 4%;
   text-align: center;
 }
-.weatherTemperature{
+
+.weatherTemperature {
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 54px;
 }
-.weatherDescription{
+
+.weatherDescription {
   display: flex;
   justify-content: center;
   flex-direction: column;
   font-size: 18px;
-  >div:not(:last-child){
+
+  > div:not(:last-child) {
     margin-bottom: 5px;
   }
 }
@@ -178,6 +204,9 @@ body {
   .forecastListItem {
     list-style-type: none;
     margin-bottom: 25px;
+    @media (max-width: 425px) {
+      padding: 0;
+    }
 
     .forecastListDateItem {
       font-size: 18px;
@@ -200,6 +229,7 @@ body {
 
   }
 }
+
 .weatherIcon {
   width: 50px;
 }
