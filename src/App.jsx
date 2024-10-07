@@ -37,8 +37,10 @@ function App() {
             }
             const geoData = await geoResponse.json();
             if (geoData.length === 0) {
-                throw new Error('Город не найден')
+                debugger
+                throw new Error('404')
             }
+
             const lat = geoData[0].lat;
             const lon = geoData[0].lon;
 
@@ -46,21 +48,18 @@ function App() {
             const url_weather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_key}&units=metric`
             const weatherResponse = await fetch(url_weather);
             if (!weatherResponse.ok) {
-                throw new Error(`Error in current weather request : ${weatherResponse.status} `);
+                throw new Error(weatherResponse.status);
             }
+
             const weatherRightNowData = await weatherResponse.json();
             setWeatherRightNowData(weatherRightNowData)
             console.log(weatherRightNowData)
 
-        } catch (err) {
-            setError(err.message);
-        }
-        try {
             // Получить прогноз погоды на ближайшие 5 дней
             const url_weather_forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_key}&units=metric`
             const weatherForecastResponse = await fetch(url_weather_forecast);
             if (!weatherForecastResponse.ok) {
-                throw new Error(`Error in the weather forecast request : ${weatherForecastResponse.status} `);
+                throw new Error(weatherForecastResponse.status);
             }
             const weatherForecastData = await weatherForecastResponse.json();
 
@@ -78,7 +77,27 @@ function App() {
             setWeatherForecastData(temperatureForecastByDate)
 
         } catch (err) {
-            setError(err.message);
+            switch (err.message) {
+                case 'Failed to fetch':{
+                    setError('Please check your internet connection')
+                    break
+                }
+                case '404': {
+                    setError('City not found. Try again')
+                    break
+                }
+                case '500': {
+                    setError('Server error. Try again later')
+                    break
+                }
+                case '429': {
+                    setError('Too many requests. Try again later')
+                    break
+                }
+                default:
+                    setError('An unexpected error occurred.  Try again')
+                    break
+            }
         } finally {
             setLoading(false)
         }
