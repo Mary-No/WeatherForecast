@@ -28,6 +28,7 @@ body {
   flex-direction: column;
   width: 60%;
   padding-bottom: 20px;
+  position: relative;
   @media (max-width: 768px) {
     width: 80%;
   }
@@ -56,6 +57,7 @@ body {
   align-items: center;
   padding-bottom: 10px;
 
+
   input {
     width: 70%;
     height: 32px;
@@ -66,6 +68,7 @@ body {
     font-size: 16px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     outline: none;
+
     @media (max-width: 425px) {
       margin-right: 0.6em;
     }
@@ -119,6 +122,63 @@ body {
   }
 }
 
+
+
+
+
+.autocompleteList {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  position: absolute;
+  top: 36px;
+  z-index: 1;
+  border-radius: 0 0 5px 5px;
+  color: #0e1021;
+
+  $breakpoints: (
+          2560px: 73.6%,
+          1920px: 74.8%,
+          1600px: 75.7%,
+          1440px: 76.36%,
+          1024px: 77.2%,
+          425px: 78.2%,
+          320px: 77%
+  );
+
+  @each $max-width, $width in $breakpoints {
+    @media (max-width: $max-width) {
+      width: $width;
+    }
+  }
+
+  .autocompleteButton {
+    background: none;
+    border: none;
+    color: #0e1021;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    p{
+      margin: 0;
+    }
+    .autocompleteCityName{
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .autocompleteCountryName{
+      color: #5e5e5e;
+    }
+
+    &:hover{
+      background-color: #ffe08b;
+    }
+
+  }
+
+}
+
 .errorMessage {
   width: 100%;
   max-width: 500px;
@@ -163,15 +223,14 @@ body {
 }
 
 .weatherRightNowIcon {
-  position: relative;
+  p {
+    position: relative;
+    text-align: center;
+    top: -38px;
+  }
 }
 
-.weatherRightNowIcon p {
-  position: absolute;
-  top: 60%;
-  left: 6%;
-  text-align: center;
-}
+
 
 .weatherTemperature {
   display: flex;

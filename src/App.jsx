@@ -11,6 +11,7 @@ function App() {
     const [dates, setDates] = useState([]);
     const [city, setCity] = useState('');
     const [citiesInLocalStorage, setCitiesInLocalStorage] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
 
     function dateHandler(date) {
         // разделяем дату и время
@@ -53,7 +54,6 @@ function App() {
 
             const weatherRightNowData = await weatherResponse.json();
             setWeatherRightNowData(weatherRightNowData)
-            console.log(weatherRightNowData)
 
             // Получить прогноз погоды на ближайшие 5 дней
             const url_weather_forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_key}&units=metric`
@@ -78,7 +78,7 @@ function App() {
 
         } catch (err) {
             switch (err.message) {
-                case 'Failed to fetch':{
+                case 'Failed to fetch': {
                     setError('Please check your internet connection')
                     break
                 }
@@ -118,14 +118,46 @@ function App() {
         }
     }
 
+    async function fetchSuggestions(city) {
+        const userName = "mrastartes"
+        const url = `http://api.geonames.org/search?q=${city}&maxRows=8&style=LONG&username=${userName}&type=json&fuzzy=0.5`
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Error in the autocomplete request: ${response.status} ${response.statusText}`);
+            }
+            const suggestionsData = await response.json();
+            setSuggestions(suggestionsData.geonames)
+        } catch (err) {
+            setError(err.message)
+        }
+
+    }
+
     useEffect(() => {
         defineUserGeolocation()
         addToLocalStorageCity()
     }, [])
 
+
+    useEffect(() => {
+        if (city.length < 2) {
+            setSuggestions([])
+            return
+        }
+        const debounceTimeout = setTimeout(() => {
+            fetchSuggestions(city)
+        }, 300)
+        return () => {
+            clearTimeout(debounceTimeout)
+        }
+    }, [city])
+
+
     const handleInputChange = (event) => {
         setCity(event.target.value)
     }
+
     const handleSubmit = async (event) => {
         event.preventDefault()
         if (city !== '') {
@@ -152,6 +184,10 @@ function App() {
         localStorage.setItem("cities", JSON.stringify(cities))
         setCitiesInLocalStorage(cities)
     }
+    function autocompleteHandler(city){
+        weatherForecast(city);
+        setSuggestions([])
+    }
 
 
     return (
@@ -161,6 +197,16 @@ function App() {
                     <input type="text" value={city} onChange={handleInputChange} placeholder="Enter the city name"/>
                     <button type="submit">Send</button>
                 </form>
+                {suggestions.length > 0 &&
+                    <div className="autocompleteList">
+                        {suggestions.map((suggestion, index) => (
+                            <button key={index} className="autocompleteButton" onClick={()=>autocompleteHandler(suggestion.name)}>
+                                <p className="autocompleteCityName">{suggestion.name}</p>
+                                <p className="autocompleteCountryName">{suggestion.countryName}</p>
+                            </button>
+                        ))}
+                    </div>
+                }
                 <div className="localStorageButtons">
                     {citiesInLocalStorage.length !== 0 && citiesInLocalStorage.map((item, index) => (
                         <button className="localStorageButton" onClick={() => weatherForecast(item)}
