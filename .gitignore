@@ -11,6 +11,7 @@
 # production
 /build
 src/scss
+src/my-proxy-server
 
 # misc
 .DS_Store

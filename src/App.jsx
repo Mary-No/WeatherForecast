@@ -1,6 +1,7 @@
 import './css/App.css';
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import loadingGif from "./assets/icons/loadingSVG.svg"
+import LangRadioButtons from "./components/LangRadioButtons/LangRadioButtons";
 
 function App() {
 
@@ -9,11 +10,38 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [dates, setDates] = useState([]);
+    const [cityFilled, setCityFilled] = useState('');
     const [city, setCity] = useState('');
     const [citiesInLocalStorage, setCitiesInLocalStorage] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
+    const [language, setLanguage] = useState('eng');
 
-    function dateHandler(date) {
+
+    const translation = {
+        'ru': {
+            feeling: "Чувствуется как ",
+            humidity: "Влажность: ",
+            windSpeed: "Скорость ветра: ",
+            input: 'Введите название города',
+            send: 'Отправить'
+        },
+        'eng': {
+            feeling: "Feels like ",
+            humidity: "Humidity: ",
+            windSpeed: "Wind speed: ",
+            input: "Enter the city name",
+            send: 'Send'
+        },
+        'es': {
+            feeling: "Se siente como ",
+            humidity: "Humedad: ",
+            windSpeed: "Velocidad del viento: ",
+            input:'Introduzca el nombre de la ciudad',
+            send: 'Enviar'
+        }
+    }
+
+    const dateHandler =  (date) =>{
         // разделяем дату и время
         const [datePart, timePart] = date.split(" ")
         // меняем формат времени
@@ -46,7 +74,7 @@ function App() {
             const lon = geoData[0].lon;
 
             // Используя ширину и долготу, получить информацию о погоде в данный момент
-            const url_weather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_key}&units=metric`
+            const url_weather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_key}&units=metric&lang=${language}`
             const weatherResponse = await fetch(url_weather);
             if (!weatherResponse.ok) {
                 throw new Error(weatherResponse.status);
@@ -56,7 +84,7 @@ function App() {
             setWeatherRightNowData(weatherRightNowData)
 
             // Получить прогноз погоды на ближайшие 5 дней
-            const url_weather_forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_key}&units=metric`
+            const url_weather_forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_key}&units=metric&lang=${language}`
             const weatherForecastResponse = await fetch(url_weather_forecast);
             if (!weatherForecastResponse.ok) {
                 throw new Error(weatherForecastResponse.status);
@@ -74,6 +102,7 @@ function App() {
 
             const dates = Object.keys(temperatureForecastByDate).reverse()
             setDates(dates)
+            console.log(dates)
             setWeatherForecastData(temperatureForecastByDate)
 
         } catch (err) {
@@ -112,6 +141,7 @@ function App() {
                 throw new Error(`Error in the user geolocation request: ${response.status} ${response.statusText}`);
             }
             const geoData = await response.json();
+            setCityFilled(geoData.city)
             weatherForecast(geoData.city)
         } catch (err) {
             setError(err.message)
@@ -120,7 +150,7 @@ function App() {
 
     async function fetchSuggestions(city) {
         const userName = "mrastartes"
-        const url = `http://api.geonames.org/search?q=${city}&maxRows=8&style=LONG&username=${userName}&type=json&fuzzy=0.5`
+        const url = `https://cors-anywhere.herokuapp.com/http://api.geonames.org/search?q=${city}&maxRows=8&style=LONG&username=${userName}&type=json&fuzzy=0.5&lang=${language}&searchlang=${language}`
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -137,6 +167,7 @@ function App() {
     useEffect(() => {
         defineUserGeolocation()
         addToLocalStorageCity()
+
     }, [])
 
 
@@ -151,6 +182,7 @@ function App() {
         return () => {
             clearTimeout(debounceTimeout)
         }
+
     }, [city])
 
 
@@ -163,6 +195,7 @@ function App() {
         if (city !== '') {
             await weatherForecast(city)
             addToLocalStorageCity(city)
+            setCityFilled(city)
             setCity('')
         } else {
             setError('Enter city name, input field is empty')
@@ -184,23 +217,36 @@ function App() {
         localStorage.setItem("cities", JSON.stringify(cities))
         setCitiesInLocalStorage(cities)
     }
-    function autocompleteHandler(city){
+
+    function autocompleteHandler(city) {
         weatherForecast(city);
+        setCityFilled(city)
         setSuggestions([])
     }
 
+    const handleLanguageChange = (language) => {
+
+        setLanguage(language)
+    }
+    useEffect(() => {
+        if (cityFilled.length > 0) {
+            weatherForecast(cityFilled)
+        }
+
+    }, [language])
 
     return (
         <div className="App">
             <div className="App-header">
                 <form className="inputForm" onSubmit={handleSubmit}>
-                    <input type="text" value={city} onChange={handleInputChange} placeholder="Enter the city name"/>
-                    <button type="submit">Send</button>
+                    <input type="text" value={city} onChange={handleInputChange} placeholder={translation[language].input}/>
+                    <button type="submit">{translation[language].send}</button>
                 </form>
                 {suggestions.length > 0 &&
                     <div className="autocompleteList">
                         {suggestions.map((suggestion, index) => (
-                            <button key={index} className="autocompleteButton" onClick={()=>autocompleteHandler(suggestion.name)}>
+                            <button key={index} className="autocompleteButton"
+                                    onClick={() => autocompleteHandler(suggestion.name)}>
                                 <p className="autocompleteCityName">{suggestion.name}</p>
                                 <p className="autocompleteCountryName">{suggestion.countryName}</p>
                             </button>
@@ -216,6 +262,7 @@ function App() {
                 </div>
                 {error && <div className="errorMessage">{error}</div>}
             </div>
+            <LangRadioButtons onLanguageChange={handleLanguageChange}/>
 
             {loading && <img src={loadingGif} alt="loading..."/>}
 
@@ -232,9 +279,9 @@ function App() {
                     </div>
                     <div className="weatherTemperature">{Math.round(weatherRightNowData.main.temp)}°C</div>
                     <div className="weatherDescription">
-                        <div>Feels like: {Math.round(weatherRightNowData.main.feels_like)}°C</div>
-                        <div>Humidity: {weatherRightNowData.main.humidity}%</div>
-                        <div>Wind speed: {weatherRightNowData.wind.speed} meter/sec</div>
+                        <div>{translation[language].feeling} {Math.round(weatherRightNowData.main.feels_like)}°C</div>
+                        <div>{translation[language].humidity} {weatherRightNowData.main.humidity}%</div>
+                        <div>{translation[language].windSpeed} {weatherRightNowData.wind.speed} meter/sec</div>
                     </div>
 
                 </div>

@@ -1,0 +1,66 @@
+.MuiRadio-root {
+  color: #b0b0b0 !important;
+}
+
+.MuiRadio-colorSecondary.Mui-checked {
+  color: #ffcb47 !important;
+}
+
+.LangRadioButtons {
+  position: absolute;
+  top: 9%;
+  right: 16%;
+}
+
+.PrivateSwitchBase-root-1 {
+  padding: 5px !important;
+}
+
+@media (max-width: 2560px) {
+  .MuiTypography-body1 {
+    font-size: 1.5rem !important;
+  }
+  .LangRadioButtons {
+    right: 14%;
+    top: 10%;
+  }
+  .MuiFormGroup-root {
+    flex-direction: row !important;
+  }
+  .MuiFormControlLabel-root {
+    margin-right: 23px !important;
+  }
+}
+@media (max-width: 1440px) {
+  .MuiTypography-body1 {
+    font-size: 1rem !important;
+  }
+  .LangRadioButtons {
+    top: 9%;
+    right: 16%;
+  }
+  .MuiFormGroup-root {
+    flex-direction: column !important;
+  }
+  .MuiFormControlLabel-root {
+    margin-right: 20px !important;
+  }
+}
+@media (max-width: 1440px) {
+  .LangRadioButtons {
+    right: 14%;
+  }
+}
+@media (max-width: 768px) {
+  .LangRadioButtons {
+    position: sticky;
+  }
+  .MuiFormGroup-root {
+    flex-direction: row !important;
+  }
+  .LangRadioButtonsContainer {
+    width: 80%;
+  }
+}
+
+/*# sourceMappingURL=LangRadioButtons.css.map */

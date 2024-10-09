@@ -204,7 +204,7 @@ body {
   display: flex;
   justify-content: center;
   flex-direction: row;
-  padding: 40px 0 40px 0;
+  padding: 60px 0 40px 0;
 }
 
 @media (max-width: 768px) {
@@ -221,11 +221,6 @@ body {
   margin-right: 4vw;
 }
 
-@media (max-width: 425px) {
-  .weatherRightNow > div:not(:last-child) {
-    margin-bottom: 50px;
-  }
-}
 .weatherInfo {
   display: flex;
   justify-content: center;
@@ -238,6 +233,19 @@ body {
   font-weight: bold;
   color: #cecece;
   letter-spacing: 0.7px;
+  text-align: center;
+}
+
+.weatherRightNowIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.weatherRightNowIcon .weatherRightNowIconImg {
+  width: 100px;
+  height: 100px;
 }
 
 .weatherRightNowIcon p {

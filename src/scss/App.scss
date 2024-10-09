@@ -192,7 +192,7 @@ body {
   display: flex;
   justify-content: center;
   flex-direction: row;
-  padding: 40px 0 40px 0;
+  padding: 60px 0 40px 0;
   @media (max-width: 768px) {
     width: 100%;
   }
@@ -202,9 +202,6 @@ body {
 
   > div:not(:last-child) {
     margin-right: 4vw;
-    @media (max-width: 425px) {
-      margin-bottom: 50px;
-    }
   }
 }
 
@@ -219,10 +216,22 @@ body {
     font-weight: bold;
     color: #cecece;
     letter-spacing: 0.7px;
+    text-align: center;
   }
 }
 
 .weatherRightNowIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .weatherRightNowIconImg{
+    width: 100px;
+    height: 100px;
+
+  }
+
   p {
     position: relative;
     text-align: center;
