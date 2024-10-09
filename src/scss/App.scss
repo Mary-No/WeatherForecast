@@ -57,7 +57,6 @@ body {
   align-items: center;
   padding-bottom: 10px;
 
-
   input {
     width: 70%;
     height: 32px;
@@ -70,7 +69,12 @@ body {
     outline: none;
 
     @media (max-width: 425px) {
+      width: 55%;
       margin-right: 0.6em;
+    }
+    @media (max-width: 320px) {
+      font-size: 14px;
+      width: 57%;
     }
 
     &:hover {
@@ -95,6 +99,13 @@ body {
 
     &:hover {
       background-color: #fcb810;
+    }
+    @media (max-width: 425px) {
+      width: 30%;
+    }
+    @media (max-width: 320px) {
+      font-size: 14px;
+      width: 32%;
     }
   }
 }
@@ -217,6 +228,9 @@ body {
     color: #cecece;
     letter-spacing: 0.7px;
     text-align: center;
+    @media (max-width: 320px) {
+      font-size: 23px;
+    }
   }
 }
 
@@ -235,6 +249,7 @@ body {
     position: relative;
     text-align: center;
     top: -36px;
+    max-width: 100px
   }
 }
 
@@ -256,6 +271,7 @@ body {
   > div:not(:last-child) {
     margin-bottom: 5px;
   }
+
 }
 
 // forecast weather
@@ -263,14 +279,16 @@ body {
 .forecastList {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
   margin: 60px 0 60px 0;
 
   .forecastListItem {
     list-style-type: none;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
+    padding: 0;
+    margin-right: 30px;
     @media (max-width: 425px) {
       padding: 0;
     }

@@ -24,13 +24,11 @@
     right: 14%;
     top: 10%;
   }
-  .MuiFormGroup-root {
-    flex-direction: row !important;
-  }
-  .MuiFormControlLabel-root {
-    margin-right: 23px !important;
-  }
 }
+.MuiFormControlLabel-root {
+  margin-right: 23px !important;
+}
+
 @media (max-width: 1440px) {
   .MuiTypography-body1 {
     font-size: 1rem !important;

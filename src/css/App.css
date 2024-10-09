@@ -71,7 +71,14 @@ body {
 
 @media (max-width: 425px) {
   .inputForm input {
+    width: 55%;
     margin-right: 0.6em;
+  }
+}
+@media (max-width: 320px) {
+  .inputForm input {
+    font-size: 14px;
+    width: 57%;
   }
 }
 .inputForm input:hover {
@@ -98,6 +105,17 @@ body {
   background-color: #fcb810;
 }
 
+@media (max-width: 425px) {
+  .inputForm button {
+    width: 30%;
+  }
+}
+@media (max-width: 320px) {
+  .inputForm button {
+    font-size: 14px;
+    width: 32%;
+  }
+}
 .localStorageButtons {
   display: flex;
   flex-direction: row;
@@ -236,6 +254,11 @@ body {
   text-align: center;
 }
 
+@media (max-width: 320px) {
+  .weatherInfo .cityName {
+    font-size: 23px;
+  }
+}
 .weatherRightNowIcon {
   display: flex;
   flex-direction: column;
@@ -252,6 +275,7 @@ body {
   position: relative;
   text-align: center;
   top: -36px;
+  max-width: 100px;
 }
 
 .weatherTemperature {
@@ -275,7 +299,7 @@ body {
 .forecastList {
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
   margin: 60px 0 60px 0;
@@ -283,7 +307,9 @@ body {
 
 .forecastList .forecastListItem {
   list-style-type: none;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+  padding: 0;
+  margin-right: 30px;
 }
 
 @media (max-width: 425px) {
