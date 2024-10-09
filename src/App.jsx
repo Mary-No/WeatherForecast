@@ -81,7 +81,6 @@ function App() {
             }
 
             const weatherRightNowData = await weatherResponse.json();
-            setWeatherRightNowData(weatherRightNowData)
 
             // Получить прогноз погоды на ближайшие 5 дней
             const url_weather_forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_key}&units=metric&lang=${language}`
@@ -102,7 +101,8 @@ function App() {
 
             const dates = Object.keys(temperatureForecastByDate).reverse()
             setDates(dates)
-            console.log(dates)
+
+            setWeatherRightNowData(weatherRightNowData)
             setWeatherForecastData(temperatureForecastByDate)
 
         } catch (err) {
@@ -112,7 +112,9 @@ function App() {
                     break
                 }
                 case '404': {
-                    setError('City not found. Try again')
+                    setWeatherRightNowData({})
+                    setWeatherForecastData({})
+                    setError('Sorry, there is no data about this city')
                     break
                 }
                 case '500': {
