@@ -61,6 +61,13 @@
   }
   .LangRadioButtonsContainer{
     width: 80%;
+    margin-bottom: 25px;
   }
+
+}
+@media (max-width: 425px) {
+  .LangRadioButtonsContainer{
+    width: 100%;
+    }
 
 }

@@ -218,9 +218,14 @@ function App() {
         setCitiesInLocalStorage(cities)
     }
 
-    function autocompleteHandler(city) {
-        weatherForecast(city);
+    const localStorageHandler = (city)=>{
         setCityFilled(city)
+        weatherForecast(city)
+    }
+
+    function autocompleteHandler(city) {
+        setCityFilled(city)
+        weatherForecast(city);
         setSuggestions([])
     }
 
@@ -237,6 +242,7 @@ function App() {
 
     return (
         <div className="App">
+            <LangRadioButtons onLanguageChange={handleLanguageChange}/>
             <div className="App-header">
                 <form className="inputForm" onSubmit={handleSubmit}>
                     <input type="text" value={city} onChange={handleInputChange} placeholder={translation[language].input}/>
@@ -255,14 +261,14 @@ function App() {
                 }
                 <div className="localStorageButtons">
                     {citiesInLocalStorage.length !== 0 && citiesInLocalStorage.map((item, index) => (
-                        <button className="localStorageButton" onClick={() => weatherForecast(item)}
+                        <button className="localStorageButton" onClick={() => localStorageHandler(item)}
                                 key={index}>{item}</button>
 
                     ))}
                 </div>
                 {error && <div className="errorMessage">{error}</div>}
             </div>
-            <LangRadioButtons onLanguageChange={handleLanguageChange}/>
+
 
             {loading && <img src={loadingGif} alt="loading..."/>}
 
