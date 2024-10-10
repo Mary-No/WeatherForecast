@@ -151,8 +151,9 @@ body {
           1600px: 75.7%,
           1440px: 76.36%,
           1024px: 77.2%,
-          425px: 78.2%,
-          320px: 77%
+          425px: 67.5%,
+          375px: 67.6%,
+          320px: 67.7%
   );
 
   @each $max-width, $width in $breakpoints {
@@ -249,7 +250,7 @@ body {
   p {
     position: relative;
     text-align: center;
-    top: -36px;
+    top: -30px;
     max-width: 100px
   }
 }
