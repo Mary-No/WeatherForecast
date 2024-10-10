@@ -100,6 +100,7 @@ body {
     &:hover {
       background-color: #fcb810;
     }
+
     @media (max-width: 425px) {
       width: 30%;
     }
@@ -132,9 +133,6 @@ body {
     }
   }
 }
-
-
-
 
 
 .autocompleteList {
@@ -171,18 +169,21 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: start;
-    p{
+
+    p {
       margin: 0;
     }
-    .autocompleteCityName{
+
+    .autocompleteCityName {
       font-size: 16px;
       font-weight: 500;
     }
-    .autocompleteCountryName{
+
+    .autocompleteCountryName {
       color: #5e5e5e;
     }
 
-    &:hover{
+    &:hover {
       background-color: #ffe08b;
     }
 
@@ -240,7 +241,7 @@ body {
   justify-content: center;
   align-items: center;
 
-  .weatherRightNowIconImg{
+  .weatherRightNowIconImg {
     width: 100px;
     height: 100px;
   }
@@ -252,7 +253,6 @@ body {
     max-width: 100px
   }
 }
-
 
 
 .weatherTemperature {
@@ -278,17 +278,30 @@ body {
 
 .forecastList {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin: 60px 0 60px 0;
+  display: grid;
+  grid-column-gap: 40px;
+  grid-row-gap: 30px;
+
+  @media (max-width: 2560px) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+  @media (max-width: 1440px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: 425px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
 
   .forecastListItem {
+    align-items: center;
     list-style-type: none;
-    margin-bottom: 30px;
+    //margin-bottom: 30px;
     padding: 0;
-    margin-right: 30px;
+    //margin-right: 30px;
     @media (max-width: 425px) {
       padding: 0;
     }
@@ -309,6 +322,20 @@ body {
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: space-between;
+        max-width: 300px;
+        @media (max-width: 768px) {
+          margin-bottom: 6px;
+          max-width: 260px;
+        }
+        @media (max-width: 425px) {
+          margin-bottom: 0px;
+          max-width: none;
+        }
+
+        p {
+          margin: 0;
+        }
       }
     }
 

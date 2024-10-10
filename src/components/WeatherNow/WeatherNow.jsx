@@ -1,3 +1,5 @@
+import React from "react";
+
 function WeatherNow({weatherRightNowData, translation, language}) {
     return (
         <div className="weatherRightNow">
@@ -20,4 +22,5 @@ function WeatherNow({weatherRightNowData, translation, language}) {
         </div>
     )
 }
-export default WeatherNow
+
+export default React.memo(WeatherNow)

@@ -1,11 +1,18 @@
 import './css/App.css';
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import loadingGif from "./assets/icons/loadingSVG.svg"
 import LangRadioButtons from "./components/LangRadioButtons/LangRadioButtons";
 import InputForm from "./components/InputForm/InputForm";
 import WeatherNow from "./components/WeatherNow/WeatherNow";
 import WeatherForecast from "./components/WeatherForecast/WeatherForecast";
 import LocalStorageButtons from "./components/LocalStorageButtons/LocalStorageButtons";
+import {
+    fetchCityCoordinates,
+    fetchCitySuggestions,
+    fetchUserGeolocation,
+    fetchWeatherForecast,
+    fetchWeatherNow
+} from "./services/apiService";
 
 function App() {
 
@@ -19,6 +26,8 @@ function App() {
     const [citiesInLocalStorage, setCitiesInLocalStorage] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
     const [language, setLanguage] = useState('eng');
+    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const autocompleteRef = useRef(null);
 
 
     const translation = {
@@ -40,15 +49,14 @@ function App() {
             feeling: "Se siente como ",
             humidity: "Humedad: ",
             windSpeed: "Velocidad del viento: ",
-            input:'Introduzca el nombre de la ciudad',
+            input: 'Introduzca el nombre de la ciudad',
             send: 'Enviar'
         }
     }
 
-    const dateHandler =  (date) =>{
+    const dateHandler = (date) => {
         // Проверяем, есть ли уже обработанные данные в sessionStorage
         const cachedData = sessionStorage.getItem(date);
-        debugger
         if (cachedData) {
             return JSON.parse(cachedData);
         }
@@ -72,39 +80,11 @@ function App() {
     async function weatherForecast(city) {
         setLoading(true);
         setError(null);
-        const API_key = "76088a478fe69c6f352e92e6bdef7e62"
-        const url_geo = `https://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${API_key}`;
+
         try {
-            // Получить ширину и долготу по названию города
-            const geoResponse = await fetch(url_geo);
-            if (!geoResponse.ok) {
-                throw new Error(`Error in geo-coding request: ${geoResponse.status} ${geoResponse.statusText}`);
-            }
-            const geoData = await geoResponse.json();
-            if (geoData.length === 0) {
-                debugger
-                throw new Error('404')
-            }
-
-            const lat = geoData[0].lat;
-            const lon = geoData[0].lon;
-
-            // Используя ширину и долготу, получить информацию о погоде в данный момент
-            const url_weather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_key}&units=metric&lang=${language}`
-            const weatherResponse = await fetch(url_weather);
-            if (!weatherResponse.ok) {
-                throw new Error(weatherResponse.status);
-            }
-
-            const weatherRightNowData = await weatherResponse.json();
-
-            // Получить прогноз погоды на ближайшие 5 дней
-            const url_weather_forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_key}&units=metric&lang=${language}`
-            const weatherForecastResponse = await fetch(url_weather_forecast);
-            if (!weatherForecastResponse.ok) {
-                throw new Error(weatherForecastResponse.status);
-            }
-            const weatherForecastData = await weatherForecastResponse.json();
+            const {lat, lon} = await fetchCityCoordinates(city);
+            const weatherRightNowData = await fetchWeatherNow(lat, lon, language);
+            const weatherForecastData = await fetchWeatherForecast(city, language);
 
             const temperatureForecastByDate = {}
             for (let i = weatherForecastData.list.length - 1; i >= 0; i--) {
@@ -117,34 +97,37 @@ function App() {
 
             const dates = Object.keys(temperatureForecastByDate).reverse()
             setDates(dates)
-
             setWeatherRightNowData(weatherRightNowData)
             setWeatherForecastData(temperatureForecastByDate)
 
         } catch (err) {
-            switch (err.message) {
-                case 'Failed to fetch': {
-                    setError('Please check your internet connection')
-                    break
+            let errorMessage;
+            if (err.status) {
+                switch (err.status) {
+                    case 404: {
+                        errorMessage = 'Sorry, there is no data about this city';
+                        setWeatherRightNowData({})
+                        setWeatherForecastData({})
+                        break
+                    }
+                    case 500: {
+                        errorMessage = 'Server error. Try again later';
+                        break
+                    }
+                    case 429: {
+                        errorMessage = 'Too many requests. Try again later';
+                        break
+                    }
+                    default:
+                        errorMessage = `Unexpected error occurred (Error ${err.status}). Please try again.`;
+                        break
                 }
-                case '404': {
-                    setWeatherRightNowData({})
-                    setWeatherForecastData({})
-                    setError('Sorry, there is no data about this city')
-                    break
-                }
-                case '500': {
-                    setError('Server error. Try again later')
-                    break
-                }
-                case '429': {
-                    setError('Too many requests. Try again later')
-                    break
-                }
-                default:
-                    setError('An unexpected error occurred.  Try again')
-                    break
+            } else if (err.message === 'Failed to fetch') {
+                errorMessage = 'Please check your internet connection'
+            } else {
+                errorMessage = 'An unexpected error occurred. Please try again.'
             }
+            setError(errorMessage)
         } finally {
             setLoading(false)
         }
@@ -159,14 +142,8 @@ function App() {
             weatherForecast(cachedCity);
             return;
         }
-        const API_key = "310595828dc44fea862411b9cab9f11d"
-        const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${API_key}`;
         try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Error in the user geolocation request: ${response.status} ${response.statusText}`);
-            }
-            const geoData = await response.json();
+            const geoData = await fetchUserGeolocation();
 
             // Сохраняем результат в localStorage
             sessionStorage.setItem('userCity', geoData.city);
@@ -178,19 +155,18 @@ function App() {
     }
 
     async function fetchSuggestions(city) {
-        const userName = "mrastartes"
-        const url = `https://cors-anywhere.herokuapp.com/http://api.geonames.org/search?q=${city}&maxRows=8&style=LONG&username=${userName}&type=json&fuzzy=0.5&lang=${language}&searchlang=${language}`
+        //получаем список городов для автокомплита
         try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Error in the autocomplete request: ${response.status} ${response.statusText}`);
-            }
-            const suggestionsData = await response.json();
+            const suggestionsData = await fetchCitySuggestions(city, language)
             setSuggestions(suggestionsData.geonames)
+            if(suggestionsData.geonames.length > 0){
+                setIsDropdownVisible(true)
+            }else{
+                setIsDropdownVisible(false)
+            }
         } catch (err) {
             setError(err.message)
         }
-
     }
 
     const handleInputChange = (event) => {
@@ -225,7 +201,7 @@ function App() {
         setCitiesInLocalStorage(cities)
     }
 
-    const localStorageHandler = (city)=>{
+    const localStorageHandler = (city) => {
         setCityFilled(city)
         weatherForecast(city)
     }
@@ -244,6 +220,13 @@ function App() {
     useEffect(() => {
         defineUserGeolocation()
         addToLocalStorageCity()
+
+        const handleClickOutside = (event)=>{
+            if(autocompleteRef.current&& !autocompleteRef.current.contains(event.target)){
+                setIsDropdownVisible(false)
+            }
+        }
+        document.addEventListener('click', handleClickOutside)
 
     }, [])
 
@@ -280,6 +263,8 @@ function App() {
                     buttonText={translation[language].send}
                     suggestions={suggestions}
                     onSuggestionClick={autocompleteHandler}
+                    autocompleteRef={autocompleteRef}
+                    isDropdownVisible={isDropdownVisible}
                 />
 
                 <LocalStorageButtons cities={citiesInLocalStorage} localStorageHandler={localStorageHandler}/>
@@ -290,10 +275,10 @@ function App() {
 
             {Object.keys(weatherRightNowData).length !== 0 && <WeatherNow weatherRightNowData={weatherRightNowData}
                                                                           translation={translation}
-                                                                          language={language} /> }
+                                                                          language={language}/>}
 
             {Object.keys(weatherForecastData).length !== 0 && <WeatherForecast weatherForecastData={weatherForecastData}
-                                                                               dates={dates} />
+                                                                               dates={dates}/>
             }
         </div>
     );

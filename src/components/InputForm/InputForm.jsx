@@ -1,13 +1,25 @@
-function InputForm({ city, onInputChange, onSubmit, placeholderText, buttonText, suggestions, onSuggestionClick }) {
+import React from "react";
+
+function InputForm({
+                       city,
+                       onInputChange,
+                       onSubmit,
+                       placeholderText,
+                       buttonText,
+                       suggestions,
+                       onSuggestionClick,
+                       autocompleteRef,
+                       isDropdownVisible
+                   }) {
 
     return (
         <div>
-        <form className="inputForm" onSubmit={onSubmit}>
-            <input type="text" value={city} onChange={onInputChange} placeholder={placeholderText}/>
-            <button type="submit">{buttonText}</button>
-        </form>
-            {suggestions.length > 0 &&
-                <div className="autocompleteList">
+            <form className="inputForm" onSubmit={onSubmit}>
+                <input type="text" value={city} onChange={onInputChange} placeholder={placeholderText}/>
+                <button type="submit">{buttonText}</button>
+            </form>
+            {suggestions.length > 0 && isDropdownVisible &&
+                <div ref={autocompleteRef} className="autocompleteList">
                     {suggestions.map((suggestion, index) => (
                         <button key={index} className="autocompleteButton"
                                 onClick={() => onSuggestionClick(suggestion.name)}>
@@ -21,4 +33,5 @@ function InputForm({ city, onInputChange, onSubmit, placeholderText, buttonText,
 
     )
 }
-export default InputForm
+
+export default React.memo(InputForm)

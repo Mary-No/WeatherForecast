@@ -1,3 +1,5 @@
+import React from "react";
+
 function WeatherForecast({dates, weatherForecastData}) {
     return (
         <div className='forecastList'>
@@ -6,8 +8,8 @@ function WeatherForecast({dates, weatherForecastData}) {
                     <li className='forecastListDateItem' key={index}>{date}</li>
                     {Object.keys(weatherForecastData[date]).reverse().map((time, i) => (
                         <ul>
-                            <li key={i}>{time} - {weatherForecastData[date][time][0]}°C
-                                - {weatherForecastData[date][time][1]}
+                            <li key={i}><p>{time} - {weatherForecastData[date][time][0]}°C
+                                - {weatherForecastData[date][time][1]}</p>
                                 <img className="weatherIcon"
                                      src={`https://openweathermap.org/img/wn/${weatherForecastData[date][time][2]}@2x.png`}
                                      alt={weatherForecastData[date][time][2]}/>
@@ -20,4 +22,5 @@ function WeatherForecast({dates, weatherForecastData}) {
         </div>
     )
 }
-export default WeatherForecast;
+
+export default React.memo(WeatherForecast);

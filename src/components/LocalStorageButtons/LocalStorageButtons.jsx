@@ -1,3 +1,5 @@
+import React from "react";
+
 function LocalStorageButtons({cities, localStorageHandler}) {
     return (
         <div className="localStorageButtons">
@@ -10,4 +12,4 @@ function LocalStorageButtons({cities, localStorageHandler}) {
     )
 }
 
-export default LocalStorageButtons;
+export default React.memo(LocalStorageButtons);
