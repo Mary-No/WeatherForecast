@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/WeatherForecast/static/css/main.feb470bb.css",
-    "main.js": "/WeatherForecast/static/js/main.71a1a8b5.js",
+    "main.js": "/WeatherForecast/static/js/main.b42e4be5.js",
     "static/media/loadingSVG.svg": "/WeatherForecast/static/media/loadingSVG.2a947e91b323a8bb82a7712e8921a385.svg",
     "index.html": "/WeatherForecast/index.html",
     "main.feb470bb.css.map": "/WeatherForecast/static/css/main.feb470bb.css.map",
-    "main.71a1a8b5.js.map": "/WeatherForecast/static/js/main.71a1a8b5.js.map"
+    "main.b42e4be5.js.map": "/WeatherForecast/static/js/main.b42e4be5.js.map"
   },
   "entrypoints": [
     "static/css/main.feb470bb.css",
-    "static/js/main.71a1a8b5.js"
+    "static/js/main.b42e4be5.js"
   ]
 }
