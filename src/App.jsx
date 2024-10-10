@@ -1,7 +1,11 @@
 import './css/App.css';
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import loadingGif from "./assets/icons/loadingSVG.svg"
 import LangRadioButtons from "./components/LangRadioButtons/LangRadioButtons";
+import InputForm from "./components/InputForm/InputForm";
+import WeatherNow from "./components/WeatherNow/WeatherNow";
+import WeatherForecast from "./components/WeatherForecast/WeatherForecast";
+import LocalStorageButtons from "./components/LocalStorageButtons/LocalStorageButtons";
 
 function App() {
 
@@ -42,6 +46,13 @@ function App() {
     }
 
     const dateHandler =  (date) =>{
+        // Проверяем, есть ли уже обработанные данные в sessionStorage
+        const cachedData = sessionStorage.getItem(date);
+        debugger
+        if (cachedData) {
+            return JSON.parse(cachedData);
+        }
+
         // разделяем дату и время
         const [datePart, timePart] = date.split(" ")
         // меняем формат времени
@@ -49,7 +60,12 @@ function App() {
         const formattedDate = `${day}.${month}.${year}`
         //убираем секунды во времени
         const formattedTime = timePart.slice(0, 5)
-        return {date: formattedDate, time: formattedTime}
+        const result = {date: formattedDate, time: formattedTime}
+
+        // Сохраняем результат в sessionStorage
+        sessionStorage.setItem(date, JSON.stringify(result));
+
+        return result;
     }
 
 
@@ -135,6 +151,14 @@ function App() {
     }
 
     async function defineUserGeolocation() {
+
+        const cachedCity = sessionStorage.getItem('userCity');
+        if (cachedCity) {
+            // Если данные есть, используем их и не делаем запрос
+            setCityFilled(cachedCity);
+            weatherForecast(cachedCity);
+            return;
+        }
         const API_key = "310595828dc44fea862411b9cab9f11d"
         const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${API_key}`;
         try {
@@ -143,6 +167,9 @@ function App() {
                 throw new Error(`Error in the user geolocation request: ${response.status} ${response.statusText}`);
             }
             const geoData = await response.json();
+
+            // Сохраняем результат в localStorage
+            sessionStorage.setItem('userCity', geoData.city);
             setCityFilled(geoData.city)
             weatherForecast(geoData.city)
         } catch (err) {
@@ -165,28 +192,6 @@ function App() {
         }
 
     }
-
-    useEffect(() => {
-        defineUserGeolocation()
-        addToLocalStorageCity()
-
-    }, [])
-
-
-    useEffect(() => {
-        if (city.length < 2) {
-            setSuggestions([])
-            return
-        }
-        const debounceTimeout = setTimeout(() => {
-            fetchSuggestions(city)
-        }, 300)
-        return () => {
-            clearTimeout(debounceTimeout)
-        }
-
-    }, [city])
-
 
     const handleInputChange = (event) => {
         setCity(event.target.value)
@@ -229,12 +234,33 @@ function App() {
         setCityFilled(city)
         weatherForecast(city);
         setSuggestions([])
+        addToLocalStorageCity(city)
     }
 
     const handleLanguageChange = (language) => {
-
         setLanguage(language)
     }
+
+    useEffect(() => {
+        defineUserGeolocation()
+        addToLocalStorageCity()
+
+    }, [])
+
+    useEffect(() => {
+        if (city.length < 2) {
+            setSuggestions([])
+            return
+        }
+        const debounceTimeout = setTimeout(() => {
+            fetchSuggestions(city)
+        }, 300)
+        return () => {
+            clearTimeout(debounceTimeout)
+        }
+
+    }, [city])
+
     useEffect(() => {
         if (cityFilled.length > 0) {
             weatherForecast(cityFilled)
@@ -246,73 +272,28 @@ function App() {
         <div className="App">
             <LangRadioButtons onLanguageChange={handleLanguageChange}/>
             <div className="App-header">
-                <form className="inputForm" onSubmit={handleSubmit}>
-                    <input type="text" value={city} onChange={handleInputChange} placeholder={translation[language].input}/>
-                    <button type="submit">{translation[language].send}</button>
-                </form>
-                {suggestions.length > 0 &&
-                    <div className="autocompleteList">
-                        {suggestions.map((suggestion, index) => (
-                            <button key={index} className="autocompleteButton"
-                                    onClick={() => autocompleteHandler(suggestion.name)}>
-                                <p className="autocompleteCityName">{suggestion.name}</p>
-                                <p className="autocompleteCountryName">{suggestion.countryName}</p>
-                            </button>
-                        ))}
-                    </div>
-                }
-                <div className="localStorageButtons">
-                    {citiesInLocalStorage.length !== 0 && citiesInLocalStorage.map((item, index) => (
-                        <button className="localStorageButton" onClick={() => localStorageHandler(item)}
-                                key={index}>{item}</button>
+                <InputForm
+                    city={city}
+                    onInputChange={handleInputChange}
+                    onSubmit={handleSubmit}
+                    placeholderText={translation[language].input}
+                    buttonText={translation[language].send}
+                    suggestions={suggestions}
+                    onSuggestionClick={autocompleteHandler}
+                />
 
-                    ))}
-                </div>
+                <LocalStorageButtons cities={citiesInLocalStorage} localStorageHandler={localStorageHandler}/>
+
                 {error && <div className="errorMessage">{error}</div>}
             </div>
-
-
             {loading && <img src={loadingGif} alt="loading..."/>}
 
-            {Object.keys(weatherRightNowData).length !== 0 &&
-                <div className="weatherRightNow">
-                    <div className="weatherInfo">
-                        <div className="cityName">{weatherRightNowData.name}</div>
-                        <div className="weatherRightNowIcon">
-                            <img className="weatherRightNowIconImg"
-                                 src={`https://openweathermap.org/img/wn/${weatherRightNowData.weather[0].icon}@2x.png`}
-                                 alt={weatherRightNowData.weather[0].icon}/>
-                            <p>{weatherRightNowData.weather[0].description}</p>
-                        </div>
-                    </div>
-                    <div className="weatherTemperature">{Math.round(weatherRightNowData.main.temp)}°C</div>
-                    <div className="weatherDescription">
-                        <div>{translation[language].feeling} {Math.round(weatherRightNowData.main.feels_like)}°C</div>
-                        <div>{translation[language].humidity} {weatherRightNowData.main.humidity}%</div>
-                        <div>{translation[language].windSpeed} {weatherRightNowData.wind.speed} meter/sec</div>
-                    </div>
+            {Object.keys(weatherRightNowData).length !== 0 && <WeatherNow weatherRightNowData={weatherRightNowData}
+                                                                          translation={translation}
+                                                                          language={language} /> }
 
-                </div>
-            }
-            {Object.keys(weatherForecastData).length !== 0 &&
-                <div className='forecastList'>
-                    {dates.map((date, index) => (
-                        <ul className='forecastListItem'>
-                            <li className='forecastListDateItem' key={index}>{date}</li>
-                            {Object.keys(weatherForecastData[date]).reverse().map((time, i) => (
-                                <ul>
-                                    <li key={i}>{time} - {weatherForecastData[date][time][0]}°C
-                                        - {weatherForecastData[date][time][1]}
-                                        <img className="weatherIcon"
-                                             src={`https://openweathermap.org/img/wn/${weatherForecastData[date][time][2]}@2x.png`}
-                                             alt={weatherForecastData[date][time][2]}/>
-                                    </li>
-                                </ul>
-
-                            ))}
-                        </ul>
-                    ))}
-                </div>
+            {Object.keys(weatherForecastData).length !== 0 && <WeatherForecast weatherForecastData={weatherForecastData}
+                                                                               dates={dates} />
             }
         </div>
     );
