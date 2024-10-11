@@ -188,6 +188,7 @@ function App() {
     function addToLocalStorageCity(city) {
         let cities = JSON.parse(localStorage.getItem("cities")) || [];
         if (city) {
+            city = city[0].toUpperCase() + city.slice(1);
             const cityIndex = cities.indexOf(city)
             if (cityIndex !== -1) {
                 cities.splice(cityIndex, 1)
@@ -211,6 +212,7 @@ function App() {
         weatherForecast(city);
         setSuggestions([])
         addToLocalStorageCity(city)
+        setCity('')
     }
 
     const handleLanguageChange = (language) => {
@@ -245,7 +247,7 @@ function App() {
     }, [city])
 
     useEffect(() => {
-        if (cityFilled.length > 0) {
+        if (cityFilled.length > 0 && error === null) {
             weatherForecast(cityFilled)
         }
 
