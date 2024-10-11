@@ -167,12 +167,17 @@ body {
 }
 @media (max-width: 425px) {
   .autocompleteList {
-    width: 78.2%;
+    width: 67.5%;
+  }
+}
+@media (max-width: 375px) {
+  .autocompleteList {
+    width: 67.6%;
   }
 }
 @media (max-width: 320px) {
   .autocompleteList {
-    width: 77%;
+    width: 67.7%;
   }
 }
 .autocompleteList .autocompleteButton {
@@ -256,7 +261,7 @@ body {
 .weatherRightNowIcon p {
   position: relative;
   text-align: center;
-  top: -36px;
+  top: -30px;
   max-width: 100px;
 }
 

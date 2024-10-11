@@ -99,6 +99,8 @@ function App() {
             setDates(dates)
             setWeatherRightNowData(weatherRightNowData)
             setWeatherForecastData(temperatureForecastByDate)
+            addToLocalStorageCity(city)
+            setCityFilled(city)
 
         } catch (err) {
             let errorMessage;
@@ -177,8 +179,6 @@ function App() {
         event.preventDefault()
         if (city !== '') {
             await weatherForecast(city)
-            addToLocalStorageCity(city)
-            setCityFilled(city)
             setCity('')
         } else {
             setError('Enter city name, input field is empty')
