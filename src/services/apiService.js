@@ -50,7 +50,7 @@ export const fetchUserGeolocation = async () => {
 
 // Функция для автодополнения городов
 export const fetchCitySuggestions = async (city, language) => {
-    const url = `https://cors-anywhere.herokuapp.com/http://api.geonames.org/search?q=${city}&maxRows=8&style=LONG&username=${USERNAME_GEONAMES}&type=json&fuzzy=0.5&lang=${language}&searchlang=${language}`;
+    const url = `https://corsproxy.io/?http://api.geonames.org/search?q=${city}&maxRows=8&style=LONG&username=${USERNAME_GEONAMES}&type=json&fuzzy=0.5&lang=${language}&searchlang=${language}`;
     const response = await fetch(url);
     if (!response.ok) {
         throw response;
