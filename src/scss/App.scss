@@ -51,7 +51,6 @@ body {
 
 .inputForm {
   width: 100%;
-  //max-width: 500px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -231,6 +230,9 @@ body {
     color: #cecece;
     letter-spacing: 0.7px;
     text-align: center;
+    @media (max-width: 425px) {
+      max-width: 120px;
+    }
     @media (max-width: 320px) {
       font-size: 23px;
     }
@@ -262,6 +264,9 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 54px;
+  @media (max-width: 320px) {
+    font-size: 42px;
+  }
 }
 
 .weatherDescription {
