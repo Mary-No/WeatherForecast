@@ -188,6 +188,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: start;
+  text-align: start;
 }
 .autocompleteList .autocompleteButton p {
   margin: 0;

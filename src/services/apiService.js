@@ -2,7 +2,6 @@
 
 const API_KEY_WEATHER = "76088a478fe69c6f352e92e6bdef7e62"; // Ключ для погоды
 const API_KEY_GEOLOCATION = "310595828dc44fea862411b9cab9f11d"; // Ключ для геолокации
-const USERNAME_GEONAMES = "mrastartes"; // Имя пользователя для GeoNames
 
 // Функция для получения координат города
 export const fetchCityCoordinates = async (city) => {
@@ -50,7 +49,7 @@ export const fetchUserGeolocation = async () => {
 
 // Функция для автодополнения городов
 export const fetchCitySuggestions = async (city, language) => {
-    const url = `https://corsproxy.io/?http://api.geonames.org/search?q=${city}&maxRows=8&style=LONG&username=${USERNAME_GEONAMES}&type=json&fuzzy=0.5&lang=${language}&searchlang=${language}`;
+    const url = `https://cors-proxy-server-for-weather-production.up.railway.app/proxy?city=${city}&lang=${language}`;
     const response = await fetch(url);
     if (!response.ok) {
         throw response;
